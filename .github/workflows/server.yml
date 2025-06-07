@@ -55,6 +55,9 @@ jobs:
       - name: Install dependencies
         working-directory: ./Client
         run: npm ci
+      - name: Lint
+        working-directory: ./Client
+        run: npx eslint .
       - name: Build client
         working-directory: ./Client
         run: npm run build

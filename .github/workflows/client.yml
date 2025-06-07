@@ -30,3 +30,6 @@ jobs:
       - name: Build client
         working-directory: ./Client
         run: npm run build
+      - name: Lint
+        working-directory: ./Client
+        run: npx eslint .
