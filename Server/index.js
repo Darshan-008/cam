@@ -54,7 +54,12 @@ app.use('/api/auth/forgot-password', authLimiter);
 
 // CORS configuration
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5174"],
+  origin: [
+    "https://campuscodewar.netlify.app", // Netlify frontend
+    "https://cam-fcp8.onrender.com",     // (optional) your backend itself
+    "http://localhost:5173",             // local dev
+    "http://localhost:5174"              // local dev
+  ],
   credentials: true,
 }));
 
