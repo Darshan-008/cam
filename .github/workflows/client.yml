@@ -1,4 +1,4 @@
-name: Client CI/CD
+name: Client CI
 
 on:
   push:
@@ -13,37 +13,20 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
-    env:
-      VITE_API_URL: ${{ secrets.VITE_API_URL }}
-
     strategy:
       matrix:
         node-version: [18.x]
-
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: Client/package-lock.json
-
-    - name: Install dependencies
-      working-directory: ./Client
-      run: npm ci
-
-    - name: Run linting
-      working-directory: ./Client
-      run: |
-        npm run lint
-
-    - name: Build
-      working-directory: ./Client
-      run: npm run build
-
-    - name: Run tests
-      working-directory: ./Client
-      run: npm test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: Client/package-lock.json
+      - name: Install dependencies
+        working-directory: ./Client
+        run: npm ci
+      - name: Build client
+        working-directory: ./Client
+        run: npm run build

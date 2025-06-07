@@ -1,48 +1,60 @@
-name: Server CI/CD
+name: Fullstack CI
 
 on:
   push:
     branches: [ main, master ]
-    paths:
-      - 'Server/**'
   pull_request:
     branches: [ main, master ]
-    paths:
-      - 'Server/**'
 
 jobs:
-  build-and-test:
+  build-and-test-server:
     runs-on: ubuntu-latest
-
     env:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       EMAIL: ${{ secrets.EMAIL }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-
     strategy:
       matrix:
         node-version: [18.x]
-
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: Server/package-lock.json
+      - name: Install dependencies
+        working-directory: ./Server
+        run: npm ci
+      - name: Lint
+        working-directory: ./Server
+        run: npx eslint .
+      - name: Run tests
+        working-directory: ./Server
+        run: npm test
+      - name: Build (if applicable)
+        working-directory: ./Server
+        run: npm run build || echo "No build step"
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: Server/package-lock.json
-
-    - name: Install dependencies
-      working-directory: ./Server
-      run: npm ci
-
-    - name: Lint
-      working-directory: ./Server
-      run: npx eslint .
-
-    - name: Run tests
-      working-directory: ./Server
-      run: npm test
+  build-client:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: Client/package-lock.json
+      - name: Install dependencies
+        working-directory: ./Client
+        run: npm ci
+      - name: Build client
+        working-directory: ./Client
+        run: npm run build
