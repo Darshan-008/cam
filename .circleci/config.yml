@@ -14,7 +14,7 @@ jobs:
           pkg-manager: npm
       - run:
           name: Run Client Tests
-          command: npm test --passWithNoTests
+          command: npm test
 
   test-server:
     executor: node/default
