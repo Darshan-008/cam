@@ -1,11 +1,22 @@
-# This config was automatically generated from your source code
-# Stacks detected: cicd:github-actions:.github/workflows,deps:node:Server
 version: 2.1
+
 orbs:
   node: circleci/node@5
+
 jobs:
-  test-node:
-    # Install node dependencies and run tests
+  test-client:
+    executor: node/default
+    working_directory: ~/project/Client
+    steps:
+      - checkout:
+          path: ~/project
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Run Client Tests
+          command: npm test --passWithNoTests
+
+  test-server:
     executor: node/default
     working_directory: ~/project/Server
     steps:
@@ -14,24 +25,11 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: Run tests
+          name: Run Server Tests
           command: npm test --passWithNoTests
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
-      - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
-      - run:
-          name: found github actions config
-          command: ':'
+
 workflows:
   build-and-test:
     jobs:
-      - test-node
-    # - deploy:
-    #     requires:
-    #       - test-node
+      - test-client
+      - test-server
