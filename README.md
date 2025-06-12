@@ -83,11 +83,7 @@ MIT
 
 ---
 
-## Screenshots
 
-_Add screenshots or demo GIFs here!_
-
----
 
 ## Contact
 
