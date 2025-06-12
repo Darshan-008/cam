@@ -1,0 +1,1 @@
+axios.post('/api/auth/login', data)

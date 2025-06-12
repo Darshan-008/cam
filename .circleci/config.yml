@@ -1,0 +1,35 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5
+
+jobs:
+  test-client:
+    executor: node/default
+    working_directory: ~/project/Client
+    steps:
+      - checkout:
+          path: ~/project
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Run Client Tests
+          command: npm test --passWithNoTests
+
+  test-server:
+    executor: node/default
+    working_directory: ~/project/Server
+    steps:
+      - checkout:
+          path: ~/project
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Run Server Tests
+          command: npm test --passWithNoTests
+
+workflows:
+  build-and-test:
+    jobs:
+      - test-client
+      - test-server
