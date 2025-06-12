@@ -28,12 +28,7 @@ Campus CodeWars is a full-stack web application for coding competitions, problem
 
 ## Getting Started
 
-### 1. Clone the repository
 
-```sh
-git clone https://github.com/yourusername/CampusCodeWars.git
-cd CampusCodeWars
-```
 
 ### 2. Setup the Backend
 
